@@ -17,18 +17,22 @@ const markup = galleryItems
   )
   .join("");
 gallery.insertAdjacentHTML("beforeend", markup);
+
 gallery.addEventListener("click", onClick);
+
 function onClick(event) {
   event.preventDefault();
   if (event.target !== event.curentTarget) {
     const instance = basicLightbox.create(`
     <img src="${event.target.dataset.source}" width="800" height="600">`);
     instance.show();
-    window.addEventListener("keydown", closeModal);
     const modal = document.querySelector(".basicLightbox");
+    window.addEventListener("keydown", closeModal);
+    modal.addEventListener("click", closeModal);
     function closeModal(event) {
-      if (event.key === "Escape") {
+      if (event.key === "Escape" || event.curentTarget === modal) {
         window.removeEventListener("keydown", closeModal);
+        modal.removeEventListener("click", closeModal);
         instance.close();
       }
     }
